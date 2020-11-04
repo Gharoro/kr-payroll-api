@@ -255,41 +255,5 @@ class AdminController extends Controller
     }
 
 
-    public function send_payslip(Request $request)
-    {
-        $company = Auth::user();
-        if ($company['role'] !== "admin") {
-            return response()->json([
-                'success' => false,
-                'error' => 'Only admins are allowed to add employees. Please contact an admin.'
-            ], 403);
-        }
-        $validator = Validator::make($request->all(), [
-            'employee_email' => 'required',
-            'employee_name' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
-        };
-        $input = $request->all();
-        $response = Http::withHeaders([
-            'accept' => 'application/json',
-            'api-key' => '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',
-            'content-type' => 'application/json'
-        ])->post('https://api.sendinblue.com/v3/smtp/email', [
-            "sender" => [
-                "name" => "Sender Alex",
-                "email" => "senderalex@example.com"
-            ],
-            "to" => [
-                [
-                    "email" => "gharoropureheart94@gmail.com",
-                    "name" => "John Doe"
-                ]
-            ],
-            "subject" => "Hello world",
-            "htmlContent" => "<html><head></head><body><p>Hello,</p>This is my first transactional email sent from Sendinblue.</p></body></html>"
-        ]);
-        return $response;
-    }
+   
 }
